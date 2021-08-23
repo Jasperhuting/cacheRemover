@@ -1,6 +1,6 @@
 {
 	"name": "justbrands",
-	"displayName": "JustBrands",
+	"displayName": "Remove Cache JustBrands",
 	"description": "",
 	"repository": {
 		"url": "https://github.com/Jasperhuting/cacheRemover",
@@ -14,10 +14,11 @@
 	"categories": [
 		"Other"
 	],
-	"icon": "./remove-cache.png",
+	"icon": "remove-cache.png",
 	"activationEvents": [
 		"onCommand:justbrands.removeCacheAcceptance",
-		"onCommand:justbrands.removeCacheTest"
+		"onCommand:justbrands.removeCacheTest",
+		"onCommand:justbrands.removeCacheRelease"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
