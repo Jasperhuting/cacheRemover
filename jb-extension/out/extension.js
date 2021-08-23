@@ -15,18 +15,24 @@ exports.deactivate = exports.activate = exports.deleteCache = void 0;
 const vscode = require("vscode");
 const environment = {
     'test': {
-        name: 'jbtest'
+        value: 'jbtest',
+        name: 'test'
     },
     'acceptance': {
-        name: 'jbaccept'
+        value: 'jbaccept',
+        name: 'acceptance'
+    },
+    'release': {
+        value: 'jbrelease',
+        name: 'release'
     }
 };
 function deleteCache(environment) {
     vscode.window.createTerminal();
     const term = vscode.window.createTerminal('Dawn');
     term.show();
-    term.sendText(`ssh -p 339 ${environment.name}@staging993.hipex.io`);
-    term.sendText(`cd ~/domains/${environment.name}.justbrands.nl/backend/current/backend && bin/magento cache:clean && supervisorctl restart varnish:00`);
+    term.sendText(`ssh -p 339 ${environment.value}@staging993.hipex.io`);
+    term.sendText(`cd ~/domains/${environment.value}.justbrands.nl/backend/current/backend && bin/magento cache:clean && supervisorctl restart varnish:00`);
     term.sendText('docker restart testapplication_apollo-server-tweakwise_1 testapplication_apollo-server-prismic_1 testapplication_apollo-server-prismic-rest_1 testapplication_apollo-server-tweakwise-m2-graphql_1 testapplication_apollo-server-m2-graphql-proxy_1 testapplication_apollo-server_1 testapplication_apollo-server_2 testapplication_apollo-server_3 testapplication_apollo-server_4 testapplication_apollo-server_5 testapplication_apollo-server_6 testapplication_apollo-server_7 testapplication_apollo-server_8 testapplication_apollo-server_9 testapplication_apollo-server_10 && exit');
     term.hide();
     vscode.window.showInformationMessage(`Cache op ${environment.name} is verwijderd`);
@@ -45,11 +51,15 @@ function activate(context) {
     let removeCashTest = vscode.commands.registerCommand('justbrands.removeCacheTest', () => __awaiter(this, void 0, void 0, function* () {
         deleteCache(environment['test']);
     }));
+    let removeCashRelease = vscode.commands.registerCommand('justbrands.removeCacheRelease', () => __awaiter(this, void 0, void 0, function* () {
+        deleteCache(environment['release']);
+    }));
     let removeCashAcceptance = vscode.commands.registerCommand('justbrands.removeCacheAcceptance', () => {
         deleteCache(environment['acceptance']);
     });
     context.subscriptions.push(removeCashTest);
     context.subscriptions.push(removeCashAcceptance);
+    context.subscriptions.push(removeCashRelease);
 }
 exports.activate = activate;
 // this method is called when your extension is deactivated
